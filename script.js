@@ -1,34 +1,25 @@
 var map;
 var divSquare = '<div id="s$coord" class = "square $color"></div>';
 var divFigure = '<div id="f$coord" class = "figure">$figure</div>';
-var isDragging = false;
-var isFlipped = false;
 
 
 $(function () {
   start();
-  $('.buttonNew').click(newFiguresPHP);
-  $('.buttonFlip').click(flipBoard);
-  setInterval('showFiguresPHP()', 1000);
 });
 
 function start() {
   map = new Array(64);
   addSquares();
-  showFiguresPHP();
-}
-
-function flipBoard() {
-  isFlipped = !isFlipped;
-  start();
+  showFigures('1111BBBB1111BBBB1111BBBB1111111111111111WWWW1111WWWW1111WWWW1111');
+  // showFigures('1111KKKK1111KKKK1111KKKK1111111111111111kkkk1111kkkk1111kkkk1111'); //Kings
+  // showFigures('1111BBBB1111BBBB1111BBBB1111111111111111WWWW1111WWWW1111WWWW1111'); //Queens
+  // showFigures('1111BBBB1111BBBB1111BBBB1111111111111111WWWW1111WWWW1111WWWW1111'); //Kings vs Queens
+  // showFigures('1111BBBB1111BBBB1111BBBB1111111111111111WWWW1111WWWW1111WWWW1111'); //Queens vs Kings
+  // showFigures('1111BBBB1111BBBB1111BBBB1111111111111111WWWW1111WWWW1111WWWW1111'); //Poshki
 }
 
 function setDraggable() {
-  $('.figure').draggable({
-    start: function (event, ui) {
-      isDragging = true;
-    }
-  });
+  $('.figure').draggable();
 }
 
 function setDroppable() {
@@ -37,8 +28,6 @@ function setDroppable() {
       var frCoord = ui.draggable.attr('id').substring(1);
       var toCoord = this.id.substring(1);
       moveFigure(frCoord, toCoord);
-      moveFigurePHP(frCoord, toCoord);
-      isDragging = false;
     }
   });
 }
@@ -56,7 +45,7 @@ function addSquares() {
   $('.board').html('');
   for (var coord = 0; coord < 64; coord++)
     $('.board').append(divSquare
-      .replace ('$coord', isFlipped ? 63 - coord : coord)
+      .replace ('$coord', coord)
       .replace ('$color',
        isBlackSquareAt(coord) ? 'black' : 'white'));
     setDroppable();
@@ -68,8 +57,6 @@ function showFigures(figures) {
 }
 
 function showFigureAt(coord, figure) {
- if (map[coord] == figure) return;
-  console.log('showFigureAt');
   map[coord] = figure;
   $('#s' + coord).html(divFigure
   .replace('$coord', coord)
@@ -93,21 +80,4 @@ function getChessSymbol(figure) {
 
 function isBlackSquareAt(coord) {
   return (coord % 8 + Math.floor(coord / 8)) % 2;
-}
-
-function newFiguresPHP() {
-  $.get('game.php?newFigures',
-  showFigures);
-}
-
-function moveFigurePHP(frCoord, toCoord) {
-  $.get('game.php?moveFigure' +
-          '&frCoord=' + frCoord +
-          '&toCoord=' + toCoord,
-        showFigures);
-}
-
-function showFiguresPHP() {
-  if (isDragging) return;
-  $.get('game.php?getFigures', showFigures);
 }
