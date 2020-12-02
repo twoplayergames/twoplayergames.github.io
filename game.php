@@ -1,0 +1,46 @@
+<?php
+
+
+session_start();
+if (isset($_GET['newFigures'])) {
+  $_SESSION['map'] = '1111BBBB1111BBBB1111BBBB1111111111111111WWWW1111WWWW1111WWWW1111';
+  echo $_SESSION['map'];
+}
+
+if (isset($_GET['getFigures']))
+  echo $_SESSION['map'];
+
+if (isset($_GET['moveFigure'])) {
+  $frCoord = $_GET['frCoord'];
+  $toCoord = $_GET['toCoord'];
+  $figure = $_SESSION['map'][$frCoord];
+  $_SESSION['map'][$frCoord] = '1';
+  $_SESSION['map'][$toCoord] = $figure;
+  echo $_SESSION['map'];
+}
+
+
+
+
+
+
+
+
+
+// Black and White
+// 1111BBBB1111BBBB1111BBBB1111111111111111WWWW1111WWWW1111WWWW1111
+//
+// Kings
+// 1111KKKK1111KKKK1111KKKK1111111111111111kkkk1111kkkk1111kkkk1111
+//
+// Queens
+// 1111BBBB1111BBBB1111BBBB1111111111111111WWWW1111WWWW1111WWWW1111
+//
+// Kings vs Queens
+// 1111BBBB1111BBBB1111BBBB1111111111111111WWWW1111WWWW1111WWWW1111s
+//
+// Queens vs Kings
+// 1111BBBB1111BBBB1111BBBB1111111111111111WWWW1111WWWW1111WWWW1111
+//
+// Poshki
+// 1111BBBB1111BBBB1111BBBB1111111111111111WWWW1111WWWW1111WWWW1111
